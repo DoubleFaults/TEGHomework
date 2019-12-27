@@ -129,6 +129,37 @@ def P2_GetResult(A: List[int], n: int, m: int) -> List[List[int]]:
     return method_2()
 
 
+def rolling_shift(iterable):
+    """
+    >>> rolling_shift([1,2,3])
+    [2, 3, 1]
+    >>> rolling_shift(rolling_shift([1,2,3]))
+    [3, 1, 2]
+    """
+    heading = iterable[0]
+    iterable = iterable[1:]
+    iterable.append(heading)
+    return iterable
+
+def largestSubset(longer, shorter):
+    """
+    after shifting shorter string,
+    let it compare with the longer,
+    and find out the longest intersection in order
+
+    >>> largestSubset([1,2,3,4], [2, 1, 3])
+    [2]
+    """
+    i = 0
+    j = 0
+    collection = []
+    while i < len(longer) and j < len(shorter):
+        if longer[i] == shorter[j]:
+            collection.append(longer[i])
+            j += 1
+        i += 1
+    return collection
+
 def P3_GetResult(A: List[int], B: List[int], C: List[int]) -> List[int]:
     """
     给定三个数组A,B,C找到它们的有序交集S
@@ -155,7 +186,32 @@ def P3_GetResult(A: List[int], B: List[int], C: List[int]) -> List[int]:
     >>> P3_GetResult([1, 2, 3, 4], [1, 2, 4], [4, 3, 1])
     [1, 4]
     """
-    raise NotImplementedError
+
+    def solve2(s1, s2):
+        # define...
+        longer = []
+        shorter = []
+
+        # pick by length
+        if len(s1) < len(s2):
+            longer = s2
+            shorter = s1
+        else:
+            longer = s1
+            shorter = s2
+
+        # looping
+        i = 0
+        result = []
+        while i < len(shorter):
+            ls = largestSubset(longer, shorter)
+            if len(result) < len(ls):
+                result = ls
+            shorter = rolling_shift(shorter)
+            i += 1
+        return result
+
+    return solve2(solve2(A, B), C)
 
 
 if __name__ == "__main__":
