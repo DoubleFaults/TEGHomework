@@ -71,6 +71,7 @@ Big O is approximately n * log(n, 2) for each lookup journey.
 sum with sliding a window.
 
 keep the largest sum of a window, and loop:
+
     - if find a new sum of a window is larger than the kept one, replace it
     - if found one equal to the kept one, append the new window
     - otherwise keep going.
@@ -79,7 +80,10 @@ Big O is sqrt(n, 2)
 
 the problem is I do too much re-calculation.
 
-for example, A = [1, 2, 3, 4], m = 3
+for example, 
+
+A = [1, 2, 3, 4], m = 3
+
     loop 1: sum([1, 2, 3])
     loop 2: sum([2, 3, 4])
     it needn't re-calculating sum(2, 3) in every loop
@@ -89,6 +93,7 @@ if I solve this problem, Big O will be (n). That will be a reasonable complexity
 #### method 2
 
 Fortunately, it is easy, just loop this:
+
     - the sum minus the beginning element of the window in last loop
     - plus new coming element in this loop to the sum
     - do the stuff introduced in method 1
