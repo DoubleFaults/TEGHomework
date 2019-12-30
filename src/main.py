@@ -4,33 +4,44 @@ from typing import List
 
 from heapq import heapify, heappop, heappush
 
-def nth_smallest(iterables: List[int], nth: int) -> int:
+def nth_smallest(the_iterable: List[int], nth: int) -> int:
     """
     >>> nth_smallest([1,2,6,3,5,4,7,8], 3)
     3
     """
-    # init a max heap, use negative element for smallest n-th element
-    # NOTE: another negate opearation before returning
-    h = [-e for e in iterables[:nth]]
+    # the `heapq` package provides smallest heap for free
+    # but I can not just make the whole the_iterable into a heap(even build from scratch -- init by [], then push element into the heap by iterating the_iterable)
+    # since the worst case is that only and only if the n of n-th nearly equals to N -- the lenght of the_iterable
+    # so I have to use a max heap here and nagate element before compare-and-check
+    #  e.g. nth_smallest([1, 2, 4, 5, 3], 3)
+    #       => -1, [] -> [-1]
+    #       => -2, [-1] -> [-2, -1]
+    #       => -4, [-2, -1] -> [-4, -2, -1]
+    #       => -5, [-4, -2, -1] -> [-4, -2, -1]
+    #       => -3, [-4, -2, -1] -> [-3, -2, -1]
+    #       return (negated idx 0)
+
+    # init with negated first n elements
+    h = [-e for e in the_iterable[:nth]]
     heapify(h)
 
-    for i in iterables[nth:]:
+    for i in the_iterable[nth:]:
         if -i > h[0]:
             heappop(h)
             heappush(h, -i)
     return -h[0]
 
-def nth_largest(iterables: List[int], nth: int) -> int:
+def nth_largest(the_iterable: List[int], nth: int) -> int:
     """
     >>> nth_largest([10,1243,5,1,2,3,4,5,6,7,8], 3)
     8
     """
     # init a max heap,
     #   which means the element at idx 0 is the largest of the list itself
-    h = iterables[:nth]
+    h = the_iterable[:nth]
     heapify(h)
 
-    for i in iterables[nth:]:
+    for i in the_iterable[nth:]:
         if i > h[0]:
             heappop(h)
             heappush(h, i)
