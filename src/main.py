@@ -2,6 +2,40 @@
 
 from typing import List
 
+from heapq import heapify, heappop, heappush
+
+def nth_smallest(iterables: List[int], nth: int) -> int:
+    """
+    >>> nth_smallest([1,2,6,3,5,4,7,8], 3)
+    3
+    """
+    # init a max heap, use negative element for smallest n-th element
+    # NOTE: another negate opearation before returning
+    h = [-e for e in iterables[:nth]]
+    heapify(h)
+
+    for i in iterables[nth:]:
+        if -i > h[0]:
+            heappop(h)
+            heappush(h, -i)
+    return -h[0]
+
+def nth_largest(iterables: List[int], nth: int) -> int:
+    """
+    >>> nth_largest([10,1243,5,1,2,3,4,5,6,7,8], 3)
+    8
+    """
+    # init a max heap,
+    #   which means the element at idx 0 is the largest of the list itself
+    h = iterables[:nth]
+    heapify(h)
+
+    for i in iterables[nth:]:
+        if i > h[0]:
+            heappop(h)
+            heappush(h, i)
+    return h[0]
+
 
 def P1_GetResult(A: List[int], B: List[int], C: List[int]) -> int:
     """
@@ -27,40 +61,15 @@ def P1_GetResult(A: List[int], B: List[int], C: List[int]) -> int:
     >>> P1_GetResult([1, 1, 1, 2, 3], [1, 1, 1, 2, 2, 2, 3, 4], [1, 2, 2, 2, 2, 3, 4, 5])
     6
     """
-    from heapq import heapify, heappop, heappush
-
-    def nth_smallest(iterables: List[int], nth: int) -> int:
-        # init a smallest heap,
-        #   which means the element at idx 0 is the smallest of the list itself
-        h = iterables[:nth]
-        heapify(h)
-
-        for i in iterables[nth:]:
-            if i > h[0]:
-                heappop(h)
-                heappush(h, i)
-        return h[0]
-
-    def nth_largest(iterables: List[int], nth: int) -> int:
-        # init a max heap,
-        #   which means the element at idx 0 is the smallest of the list itself
-        h = iterables[:nth]
-        heapify(h)
-
-        for i in iterables[nth:]:
-            if i < h[0]:
-                heappop(h)
-                heappush(h, i)
-        return h[-1]
 
     # de-duplicated -> setup a heap -> pop to sum
     result = 0
     if len(set(A)) >= 3:
-        result += nth_smallest(list(set(A)), 3)
+        result += nth_largest(list(set(A)), 3)
     if len(set(B)) >= 4:
-        result += nth_largest(list(set(B)), 4)
+        result += nth_smallest(list(set(B)), 4)
     if len(set(C)) >= 5:
-        result += nth_smallest(list(set(C)), 5)
+        result += nth_largest(list(set(C)), 5)
 
     return result
 
