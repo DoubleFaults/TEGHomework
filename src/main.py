@@ -11,7 +11,7 @@ def nth_smallest(the_iterable: List[int], nth: int) -> int:
     """
     # the `heapq` package provides smallest heap for free
     # but I can not just make the whole the_iterable into a heap(even build from scratch -- init by [], then push element into the heap by iterating the_iterable)
-    # since the worst case is that only and only if the n of n-th nearly equals to N -- the lenght of the_iterable
+    # since the worst case is that only and only if the n of n-th approaches to N -- the lenght of the_iterable
     # so I have to use a max heap here and nagate element before compare-and-check
     #  e.g. nth_smallest([1, 2, 4, 5, 3], 3)
     #       => -1, [] -> [-1]
